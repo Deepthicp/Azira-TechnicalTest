@@ -1,0 +1,323 @@
+{
+	"info": {
+		"_postman_id": "27aacde5-5cf6-48fb-a1dd-6818573ea203",
+		"name": "Campaign",
+		"description": "The **Campaign Collection** in Postman is a set of API requests designed to manage advertising campaigns. This collection covers the essential CRUD (Create, Read, Update, and Delete) operations for campaigns. The campaign data contains key attributes like campaign name, client, category, type, and status. This Postman collection allows developers, product owners, and testers to interact with the campaign API, ensuring campaigns are managed effectively within a system.EndFragment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5299235"
+	},
+	"item": [
+		{
+			"name": "Create campaign",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"\r",
+							"// Save the campaign ID for later use\r",
+							"pm.environment.set(\"campaignId\", response.id);\r",
+							"\r",
+							"\r",
+							"//Campaign creation validation\r",
+							"pm.test(\"Campaign created successfully\", function () {\r",
+							"    pm.expect(pm.response.code).to.equal(201); // Check for successful creation\r",
+							"});\r",
+							"\r",
+							"\r",
+							"// Response Body Structure Validation\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(response).to.have.property(\"id\");\r",
+							"    pm.expect(response).to.have.property(\"name\");\r",
+							"    pm.expect(response).to.have.property(\"type\");\r",
+							"    pm.expect(response).to.have.property(\"category\");\r",
+							"     pm.expect(response).to.have.property(\"client\");\r",
+							"    pm.expect(response).to.have.property(\"status\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": " {\r\n    \"id\": 111,\r\n    \"name\": \"Lafayette_2024_11_Black_Friday\",\r\n    \"client\": \"Lafayette\",\r\n   \"category\": \"DTS\",\r\n    \"type\": \"CPV\",\r\n    \"status\": \"Running\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Baseurl}}/campaign",
+					"host": [
+						"{{Baseurl}}"
+					],
+					"path": [
+						"campaign"
+					]
+				},
+				"description": "The **POST** operation is used to create a new campaign in the system. This operation accepts a request body containing the campaign details such as `id`, `name`, `client`, `category`, `type`, and `status`. Once the campaign is successfully created, the server will respond with a confirmation message along with the details of the newly created campaign"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Campaigns list by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// Check if response is an array (multiple campaigns)\r",
+							"if (Array.isArray(response)) {\r",
+							"    pm.test(\"Campaign list is not empty\", function () {\r",
+							"        pm.expect(response.length).to.be.above(0);\r",
+							"    });\r",
+							"\r",
+							"    // Verify each campaign in the list\r",
+							"    response.forEach(function (campaign) {\r",
+							"        pm.test(\"Each campaign matches input data\", function () {\r",
+							"            pm.expect(campaign.name).to.equal(response.name);\r",
+							"            pm.expect(campaign.client).to.equal(response.client);\r",
+							"            pm.expect(campaign.category).to.equal(response.category);\r",
+							"            pm.expect(campaign.type).to.equal(response.type);\r",
+							"            pm.expect(campaign.status).to.equal(response.status);\r",
+							"        });\r",
+							"    });\r",
+							"} else {\r",
+							"    // Handle the case where the response is not an array\r",
+							"    pm.test(\"Response is not an array\", function () {\r",
+							"        pm.expect(response).to.be.an('object');\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"// Check if the response is an array\r",
+							"if (Array.isArray(response)) {\r",
+							"    // Create an array of ids to check for duplicates\r",
+							"    const ids = response.map(campaign => campaign.id);\r",
+							"\r",
+							"    // Check for duplicates by comparing the length of the array and the length of the set\r",
+							"    pm.test(\"No duplicate campaign IDs\", function () {\r",
+							"        const uniqueIds = new Set(ids);\r",
+							"        pm.expect(uniqueIds.size).to.equal(ids.length);\r",
+							"    });\r",
+							"} else {\r",
+							"    pm.test(\"Response is not an array\", function () {\r",
+							"        pm.expect(response).to.be.an('object');\r",
+							"    });\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Baseurl}}/campaign/{{campaignId}}",
+					"host": [
+						"{{Baseurl}}"
+					],
+					"path": [
+						"campaign",
+						"{{campaignId}}"
+					]
+				},
+				"description": "The **GET** operation is used to retrieve the details of an existing campaign by its unique `id`. The system will respond with the full campaign data, such as `id`, `name`, `client`, `category`, `type`, and `status`, if the campaign exists. If no campaign with the specified `id` is found, the server will return a 404 status"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Campaign",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const response = pm.response.json();\r",
+							"const updatedBody = JSON.parse(pm.environment.get(\"requestBody\"));\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response matches updated input data\", function () {\r",
+							"    pm.expect(response.name).to.equal(response.name);\r",
+							"    pm.expect(response.client).to.equal(response.client);\r",
+							"    pm.expect(response.category).to.equal(response.category);\r",
+							"    pm.expect(response.type).to.equal(response.type);\r",
+							"    pm.expect(response.status).to.equal(response.status);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Updated_Automation_Campaign\",\r\n    \"client\": \"Updated_Lafayette\",\r\n    \"category\": \"Updated_DTS\",\r\n    \"type\": \"CPM\",\r\n    \"status\": \"Paused\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Baseurl}}/campaign/{{campaignId}}",
+					"host": [
+						"{{Baseurl}}"
+					],
+					"path": [
+						"campaign",
+						"{{campaignId}}"
+					]
+				},
+				"description": "The **PUT** operation is used to update the details of an existing campaign. The campaign is identified by its unique `id` in the URL, and the new values for the campaign fields are provided in the request body. This operation allows modifying fields like `name`, `client`, `category`, `type`, and `status`.\n\nIf the campaign with the specified `id` exists, the system will update the campaign details and return the updated campaign information. If the campaign does not exist, the system will return a `404 Not Found` status code."
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Campaign",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"// After deletion, unset the campaign ID variable\r",
+							"pm.environment.unset(\"campaignId\");\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{Baseurl}}/campaign/{{campaignId}}",
+					"host": [
+						"{{Baseurl}}"
+					],
+					"path": [
+						"campaign",
+						"{{campaignId}}"
+					]
+				},
+				"description": "The **DELETE** operation is used to remove a campaign from the system. The campaign is identified by its unique `id` in the URL. Upon successful deletion, the system will return a confirmation message. If the campaign with the specified `id` does not exist, the system will return a `404 Not Found` status code.\n\nThis operation permanently removes the campaign from the system, and all data associated with the campaign will be deleted. It is recommended to verify the deletion by performing a GET request for the deleted campaign to ensure it no longer exists."
+			},
+			"response": []
+		},
+		{
+			"name": "Get Campaign lists",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Baseurl}}/campaign",
+					"host": [
+						"{{Baseurl}}"
+					],
+					"path": [
+						"campaign"
+					]
+				},
+				"description": "The **GET** operation is used to retrieve a list of all campaigns in the system. This operation provides an overview of all campaigns, including their attributes like `id`, `name`, `client`, `category`, `status`, etc. It is useful for displaying a list of campaigns or checking the available campaigns in the system.\n\nThe response will contain an array of campaigns, where each campaign object represents an individual campaign's details. If there are no campaigns in the system, the response will return an empty array."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"const response = pm.response.json();\r",
+					"\r",
+					"//Response time validation\r",
+					"pm.test(\"Response time is less than 200ms\", function () {\r",
+					"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+					"});\r",
+					"\r",
+					"////content type validation"
+				]
+			}
+		}
+	]
+}
