@@ -129,16 +129,18 @@ describe('Campaign API Automation Flow with Validations', () => {
 
     // Step 7: Negative Test Case for Missing Fields
     cy.then(() => {
-      const invalidCampaignData = { name: "Incomplete_Campaign" };
+      const invalidCampaignData = { name: "Incomplete_Campaign" }; // Missing required fields
       cy.request({
         method: 'POST',
         url: `${baseUrl}/campaign`,
         body: invalidCampaignData,
-        failOnStatusCode: false,
+        failOnStatusCode: false, // Do not fail the test on a non-2xx status code
       }).then((response) => {
-        expect(response.status).to.eq(400); // Expect Bad Request
-        expect(response.body.message).to.include('Validation failed'); // Check error message
+        expect(response.status).to.eq(400); // Expect Bad Request if missing required fields
+        expect(response.body.message).to.include('Validation failed'); // Check for validation error message
       });
     });
+    
+    });
   });
-});
+
