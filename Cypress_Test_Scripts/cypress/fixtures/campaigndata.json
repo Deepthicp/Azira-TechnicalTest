@@ -1,0 +1,19 @@
+{
+  "baseUrl": "http://localhost:8081",
+  "campaignData": {
+    "id": 20,
+    "name": "Lafayette_2024_11_Black_Friday",
+    "client": "Lafayette",
+    "category": "DTS",
+    "type": "CPV",
+    "status": "Running"
+  },
+  "updatedCampaignData": {
+    "name": "Lafayette_2024_11_Black_Friday_Updated",
+    "client": "Lafayette",
+    "category": "DTS",
+    "type": "CPV",
+    "status": "Paused"
+  }
+}
+
