@@ -22,7 +22,7 @@ describe('Campaign API Automation Flow with Validations', () => {
       expect(response.body).to.have.property('id'); // Ensure response has 'id'
 
       // Validate response time
-      expect(response.duration).to.be.lessThan(500);
+      expect(response.duration).to.be.lessThan(200);
 
       // Validate headers
       expect(response.headers['content-type']).to.include('application/json');
